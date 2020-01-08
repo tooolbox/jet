@@ -1167,7 +1167,7 @@ func (st *Runtime) evalFieldAccessExpression(node *ChainNode) (reflect.Value, er
 	for i := 0; i < len(node.Field); i++ {
 		resolved = getFieldOrMethodValue(node.Field[i], resolved)
 		if !resolved.IsValid() {
-			return resolved, fmt.Errorf("there is no field or method %q in %s", node.Field[i], getTypeString(resolved))
+			return resolved, fmt.Errorf("there isn't a field or method %q in %s", node.Field[i], getTypeString(resolved))
 		}
 	}
 	return resolved, nil
