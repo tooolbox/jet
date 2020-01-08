@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"github.com/CloudyKit/fastprinter"
 	"io"
+	"log"
 	"reflect"
 	"runtime"
 	"strconv"
@@ -1455,20 +1456,28 @@ var cachedStructsMutex = sync.RWMutex{}
 var cachedStructsFieldIndex = map[reflect.Type]map[string][]int{}
 
 func getFieldOrMethodValue(key string, v reflect.Value) reflect.Value {
+	log.Printf("Getting field or method: %s", key)
 	if !v.IsValid() {
+		log.Printf("Field or method not valid")
 		return reflect.Value{}
 	}
 
+	log.Printf("Getting value...")
 	value := getValue(key, v)
 	if value.Kind() == reflect.Interface && !value.IsNil() {
+		log.Printf("Value is non-nil interface, dereferencing...")
 		value = value.Elem()
 	}
+	log.Printf("Returning: %+v", value)
 	return value
 }
 
 func getValue(key string, v reflect.Value) reflect.Value {
 
+	log.Printf("Doing getValue for: %s", key)
+
 	if !v.IsValid() {
+		log.Printf("Value not valid")
 		return reflect.Value{}
 	}
 
@@ -1480,20 +1489,26 @@ func getValue(key string, v reflect.Value) reflect.Value {
 
 	k := v.Kind()
 	if k == reflect.Ptr || k == reflect.Interface {
+		log.Printf("Value is pointer/interface")
 		v = v.Elem()
 		k = v.Kind()
 		value = v.MethodByName(key)
 		if value.IsValid() {
+			log.Printf("Value has methodByName: %s", key)
 			return value
 		}
 	}
 
 	if v.CanAddr() {
+		log.Printf("Value CanAddr")
 		value = v.Addr().MethodByName(key)
 		if value.IsValid() {
+			log.Printf("Value Addr'd has MethodByName: %s", key)
 			return value
 		}
 	}
+
+	log.Printf("GetValue continuing...")
 
 	if k == reflect.Struct {
 		typ := v.Type()
