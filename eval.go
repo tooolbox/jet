@@ -1488,6 +1488,7 @@ func getValue(key string, v reflect.Value) reflect.Value {
 	}
 
 	k := v.Kind()
+	log.Printf("Kind: %v", k)
 	if k == reflect.Ptr || k == reflect.Interface {
 		log.Printf("Value is pointer/interface")
 		v = v.Elem()
