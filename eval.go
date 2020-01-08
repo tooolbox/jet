@@ -1458,14 +1458,6 @@ func getFieldOrMethodValue(key string, v reflect.Value) reflect.Value {
 	if value.Kind() == reflect.Interface && !value.IsNil() {
 		value = value.Elem()
 	}
-
-	for dereferenceLimit := 2; value.Kind() == reflect.Ptr && dereferenceLimit >= 0; dereferenceLimit-- {
-		if value.IsNil() {
-			return reflect.ValueOf("")
-		}
-		value = reflect.Indirect(value)
-	}
-
 	return value
 }
 
