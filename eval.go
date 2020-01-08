@@ -1102,14 +1102,9 @@ func (st *Runtime) evalBaseExpressionGroup(node Node) reflect.Value {
 		}
 		return resolved
 	case NodeChain:
-		node := node.(*ChainNode)
-		var resolved = st.evalPrimaryExpressionGroup(node.Node)
-		for i := 0; i < len(node.Field); i++ {
-			fieldValue := getFieldOrMethodValue(node.Field[i], resolved)
-			if !fieldValue.IsValid() {
-				node.errorf("there is no field or method %q in %s", node.Field[i], getTypeString(resolved))
-			}
-			resolved = fieldValue
+		resolved, err := st.evalFieldAccessExpression(node.(*ChainNode))
+		if err != nil {
+			node.error(err)
 		}
 		return resolved
 	case NodeNumber:
