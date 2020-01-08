@@ -1486,7 +1486,9 @@ func getValue(key string, v reflect.Value) reflect.Value {
 		if value.IsValid() {
 			return value
 		}
-	} else if v.CanAddr() {
+	}
+
+	if v.CanAddr() {
 		value = v.Addr().MethodByName(key)
 		if value.IsValid() {
 			return value
