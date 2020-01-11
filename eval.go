@@ -1083,13 +1083,13 @@ func (st *Runtime) evalBaseExpressionGroup(node Node) reflect.Value {
 			node.errorf("identifier %q is not available in the current scope %v", node, st.variables)
 		}
 
-		// limit the number of pointers to follow
-		for dereferenceLimit := 2; resolved.Kind() == reflect.Ptr && dereferenceLimit >= 0; dereferenceLimit-- {
-			if resolved.IsNil() {
-				return reflect.ValueOf("")
-			}
-			resolved = reflect.Indirect(resolved)
-		}
+		// // limit the number of pointers to follow
+		// for dereferenceLimit := 2; resolved.Kind() == reflect.Ptr && dereferenceLimit >= 0; dereferenceLimit-- {
+		// 	if resolved.IsNil() {
+		// 		return reflect.ValueOf("")
+		// 	}
+		// 	resolved = reflect.Indirect(resolved)
+		// }
 
 		return resolved
 	case NodeField:
@@ -1451,12 +1451,12 @@ func getFieldOrMethodValue(key string, v reflect.Value) reflect.Value {
 		value = value.Elem()
 	}
 
-	for dereferenceLimit := 2; value.Kind() == reflect.Ptr && dereferenceLimit >= 0; dereferenceLimit-- {
-		if value.IsNil() {
-			return reflect.ValueOf("")
-		}
-		value = reflect.Indirect(value)
-	}
+	// for dereferenceLimit := 2; value.Kind() == reflect.Ptr && dereferenceLimit >= 0; dereferenceLimit-- {
+	// 	if value.IsNil() {
+	// 		return reflect.ValueOf("")
+	// 	}
+	// 	value = reflect.Indirect(value)
+	// }
 
 	return value
 }
